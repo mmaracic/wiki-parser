@@ -14,6 +14,10 @@ val props = Properties().apply {
     load(FileInputStream(file("../gradle.properties")))
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+}
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()

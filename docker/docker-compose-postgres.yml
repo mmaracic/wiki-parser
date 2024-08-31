@@ -1,0 +1,22 @@
+# Use admin/admin as user/password credentials on database db
+# Use postgres/postgres as superuser user/password credentials on a database postgres or db
+# admin interface available on port 8081; use system "PostgreSQL", server name "db", credentials and database as above
+version: '3.1'
+
+services:
+
+  db:
+    build:
+      context: ./postgres
+    image: postgres-custom:1.1
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8081:8080"
