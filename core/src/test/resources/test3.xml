@@ -1,8 +1,4 @@
-<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.10/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.10/ http://www.mediawiki.org/xml/export-0.10.xsd" version="0.10" xml:lang="en">
-  <siteinfo>
-    <sitename>Wikipedia</sitename>
-  </siteinfo>
-  <page>
+<page>
     <title>April</title>
     <revision>
       <id>8978922</id>
@@ -259,4 +255,4 @@ Quite a few festivals are held in this month. In many [[Southeast Asia]]n cultur
 {{Months}}</text>
       <sha1>jlyh5dpdie7lqpfbh0ouqolnazmg4v5</sha1>
     </revision>
-  </page>
+</page>

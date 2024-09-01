@@ -38,9 +38,10 @@ public class XmlParser {
     }
 
     public <T> T readNext(Class<T> c, Set<String> ignoredTags) throws XMLStreamException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        String classPath = analyzeClass(c);
         //key is path, value is attribute object field
-        Map<String, Field> fields = analyzeClass(c);
-        final XStreamFieldStack fieldStack = new XStreamFieldStack(fields);
+        Map<String, Field> fields = analyzeClassFields(c);
+        final XStreamFieldStack fieldStack = new XStreamFieldStack(classPath, fields);
 
         T object = c.getConstructor().newInstance();
         if (!fieldStack.isEmpty()) {
@@ -53,7 +54,7 @@ public class XmlParser {
 
     private <T> void readNext(T object, Set<String> ignoredTags, XStreamFieldStack fieldStack) throws XMLStreamException, IllegalAccessException {
 
-        while (reader.hasNext() && (fieldStack.getMaxDepth() == 0 || !fieldStack.isEmpty())) {
+        while (reader.hasNext() && (fieldStack.getMaxDepth() == 0 || fieldStack.getClassInstancesVisited() == 0 || !fieldStack.isEmpty())) {
             // Event is actually the tag . It is of 3 types
             // <name> = StartEvent
             // </name> = EndEvent
@@ -82,8 +83,8 @@ public class XmlParser {
                 // Triggered when there is data after the tag which is currently opened.
                 Characters element = (Characters) event;
                 if (!element.getData().trim().isEmpty()) {
-                    if (fieldStack.getMatchingFieldsCount()>0) {
-                        for(Field field: fieldStack.getMatchingFields()) {
+                    if (fieldStack.getMatchingFieldsCount() > 0) {
+                        for (Field field : fieldStack.getMatchingFields()) {
                             field.set(object, element.getData());
                         }
                     }
@@ -111,7 +112,16 @@ public class XmlParser {
         return attributes;
     }
 
-    private Map<String, Field> analyzeClass(Class<?> clazz) {
+    private String analyzeClass(Class<?> clazz) {
+        if (clazz.isAnnotationPresent(WikiPath.class)) {
+            //Annotation postprocessor ensures the class has a path
+            WikiPath annotation = clazz.getAnnotation(WikiPath.class);
+            return annotation.path();
+        }
+        return null;
+    }
+
+    private Map<String, Field> analyzeClassFields(Class<?> clazz) {
         Map<String, Field> wikiProperties = new HashMap<>();
         for (Field field : clazz.getDeclaredFields()) {
             field.setAccessible(true);

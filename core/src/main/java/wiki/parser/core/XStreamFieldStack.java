@@ -1,23 +1,33 @@
 package wiki.parser.core;
 
+import lombok.Getter;
+
 import javax.xml.namespace.QName;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class XStreamFieldStack implements XStreamStack {
 
+    private final String classPath;
     private final Map<String, Field> initFields;
 
+    @Getter
+    private int classInstancesVisited = 0;
     private final XStreamPath xPath = new XStreamPath();
     private final List<Set<Map.Entry<String, Field>>> fieldsQualifyAtPathLevel = new ArrayList<>(10);
     private final List<Set<Map.Entry<String, Field>>> fieldsMatchAtPathLevel = new ArrayList<>(10);
 
-    public XStreamFieldStack(Map<String, Field> initFields) {
+    public XStreamFieldStack(String classPath, Map<String, Field> initFields) {
+        this.classPath = classPath;
         this.initFields = initFields;
+
+        if (classPath == null || classPath.isBlank()) {
+            throw new IllegalStateException("Class path should not be null or blank");
+        }
+        if (initFields == null || initFields.isEmpty()) {
+            throw new IllegalStateException("Init fields should not be null or empty");
+        }
     }
 
 
@@ -26,6 +36,9 @@ public class XStreamFieldStack implements XStreamStack {
         Set<Map.Entry<String, Field>> levelInput = (xPath.isEmpty()) ? initFields.entrySet() : fieldsQualifyAtPathLevel.getLast();
 
         xPath.push(element);
+        if (xPath.equals(classPath)) {
+            classInstancesVisited++;
+        }
         fieldsQualifyAtPathLevel.addLast(filterQualifyingFields(xPath, levelInput));
         fieldsMatchAtPathLevel.addLast(filterMatchingFields(xPath, levelInput));
         return true;
@@ -65,6 +78,7 @@ public class XStreamFieldStack implements XStreamStack {
     public int getMatchingFieldsCount() {
         return fieldsMatchAtPathLevel.getLast().size();
     }
+
     private static Set<Map.Entry<String, Field>> filterQualifyingFields(XStreamPath currentPath, Set<Map.Entry<String, Field>> input) {
         return input.stream().filter((it) -> currentPath.match(it.getKey()) > 0).collect(Collectors.toSet());
     }
