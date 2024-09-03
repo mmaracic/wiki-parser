@@ -70,19 +70,17 @@ public class XStreamPath implements XStreamStack {
      * @return Match degree, from 0f (no match) to 1f (full match)
      */
     public float match(String rawPath) {
-        XStreamPath path = new XStreamPath();
         String[] rawPathElements = rawPath.split("\\.");
-        if (this.size() != rawPathElements.length) {
-            return 0f;
-        }
-        for (int i = 0; i < this.size(); i++) {
+        int minLength = Math.min(this.size(), rawPathElements.length);
+        int maxLength = Math.max(this.size(), rawPathElements.length);
+        for (int i = 0; i < minLength; i++) {
             String rawElement = rawPathElements[i];
             String pathElement = this.orderedPath.get(i).getLocalPart();
             if (!rawElement.equals(pathElement)) {
-                return i / (float) this.size();
+                return 0;
             }
         }
-        return 1f;
+        return minLength / (float) maxLength;
     }
 
     public boolean equals(String rawPath) {

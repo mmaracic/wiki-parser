@@ -32,19 +32,29 @@ public class XmlParserTest {
     @Test
     public void testReadTwoPages() throws XMLStreamException, FileNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         var parser = new XmlParser("./src/test/resources/test.xml");
+        var title1 = "April";
         WikiPage page = parser.readNext(WikiPage.class, new HashSet<>(List.of(MEDIAWIKI)));
-        Assertions.assertNotNull(page.getTitle());
+        Assertions.assertEquals(title1, page.getTitle());
         Assertions.assertNotNull(page.getRevison());
         Assertions.assertNotNull(page.getText());
+        Assertions.assertTrue(page.getText().contains(title1));
+        var title2 = "August";
+        WikiPage page2 = parser.readNext(WikiPage.class, new HashSet<>(List.of(MEDIAWIKI)));
+        Assertions.assertEquals(title2, page2.getTitle());
+        Assertions.assertNotNull(page2.getRevison());
+        Assertions.assertNotNull(page2.getText());
+        Assertions.assertTrue(page2.getText().contains(title2));
     }
 
     @Test
     public void testReadOnePgeWithHeader() throws XMLStreamException, FileNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         var parser = new XmlParser("./src/test/resources/test2.xml");
+        var title1 = "April";
         WikiPage page = parser.readNext(WikiPage.class, new HashSet<>(List.of(MEDIAWIKI)));
-        Assertions.assertNotNull(page.getTitle());
+        Assertions.assertEquals(title1, page.getTitle());
         Assertions.assertNotNull(page.getRevison());
         Assertions.assertNotNull(page.getText());
+        Assertions.assertTrue(page.getText().contains(title1));
     }
 
     @Test

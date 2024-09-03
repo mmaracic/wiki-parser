@@ -54,7 +54,7 @@ public class XmlParser {
 
     private <T> void readNext(T object, Set<String> ignoredTags, XStreamFieldStack fieldStack) throws XMLStreamException, IllegalAccessException {
 
-        while (reader.hasNext() && (fieldStack.getMaxDepth() == 0 || fieldStack.getClassInstancesVisited() == 0 || !fieldStack.isEmpty())) {
+        while (reader.hasNext() && fieldStack.getInstancesVisited() < 1) {
             // Event is actually the tag . It is of 3 types
             // <name> = StartEvent
             // </name> = EndEvent
@@ -85,7 +85,8 @@ public class XmlParser {
                 if (!element.getData().trim().isEmpty()) {
                     if (fieldStack.getMatchingFieldsCount() > 0) {
                         for (Field field : fieldStack.getMatchingFields()) {
-                            field.set(object, element.getData());
+                            var existingValue = field.get(object);
+                            field.set(object, (existingValue != null) ? existingValue + element.getData() : element.getData());
                         }
                     }
                     //log.info("Element " + fieldStack.toString() + " data: " + element.getData());

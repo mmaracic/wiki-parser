@@ -1,7 +1,5 @@
 package wiki.parser.core;
 
-import lombok.Getter;
-
 import javax.xml.namespace.QName;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -12,8 +10,7 @@ public class XStreamFieldStack implements XStreamStack {
     private final String classPath;
     private final Map<String, Field> initFields;
 
-    @Getter
-    private int classInstancesVisited = 0;
+    private int classPathsVisited = 0;
     private final XStreamPath xPath = new XStreamPath();
     private final List<Set<Map.Entry<String, Field>>> fieldsQualifyAtPathLevel = new ArrayList<>(10);
     private final List<Set<Map.Entry<String, Field>>> fieldsMatchAtPathLevel = new ArrayList<>(10);
@@ -37,7 +34,7 @@ public class XStreamFieldStack implements XStreamStack {
 
         xPath.push(element);
         if (xPath.equals(classPath)) {
-            classInstancesVisited++;
+            classPathsVisited++;
         }
         fieldsQualifyAtPathLevel.addLast(filterQualifyingFields(xPath, levelInput));
         fieldsMatchAtPathLevel.addLast(filterMatchingFields(xPath, levelInput));
@@ -46,6 +43,9 @@ public class XStreamFieldStack implements XStreamStack {
 
     @Override
     public boolean pop(QName element) {
+        if (xPath.equals(classPath)) {
+            classPathsVisited++;
+        }
         fieldsQualifyAtPathLevel.removeLast();
         fieldsMatchAtPathLevel.removeLast();
         return xPath.pop(element);
@@ -69,6 +69,10 @@ public class XStreamFieldStack implements XStreamStack {
     @Override
     public String toString() {
         return xPath.toString();
+    }
+
+    public int getInstancesVisited() {
+        return classPathsVisited / 2;
     }
 
     public Set<Field> getMatchingFields() {
