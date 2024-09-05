@@ -7,7 +7,5 @@ plugins {
 }
 
 dependencies {
-    annotationProcessor(project(":annotation"))
-
-    implementation(project(":annotation"))
+    testImplementation("io.toolisticon.cute:cute:1.7.0")
 }
