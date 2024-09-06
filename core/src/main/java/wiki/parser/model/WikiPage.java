@@ -1,9 +1,9 @@
 package wiki.parser.model;
 
-import lombok.Getter;
+import lombok.Data;
 import wiki.parser.annotation.WikiPath;
 
-@Getter
+@Data
 @WikiPath(path = "page")
 public class WikiPage {
     @WikiPath(path = "page.title")

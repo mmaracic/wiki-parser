@@ -1,4 +1,4 @@
-package wiki.parser.core;
+package wiki.parser.xml;
 
 public class Tags {
 

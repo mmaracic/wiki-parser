@@ -1,4 +1,4 @@
-package wiki.parser.core;
+package wiki.parser.xml;
 
 import lombok.extern.java.Log;
 import wiki.parser.annotation.WikiPath;
@@ -86,7 +86,8 @@ public class XmlParser {
                     if (fieldStack.getMatchingFieldsCount() > 0) {
                         for (Field field : fieldStack.getMatchingFields()) {
                             var existingValue = field.get(object);
-                            field.set(object, (existingValue != null) ? existingValue + element.getData() : element.getData());
+                            var newTextSection = element.getData();
+                            field.set(object, (existingValue != null) ? existingValue + newTextSection : newTextSection);
                         }
                     }
                     //log.info("Element " + fieldStack.toString() + " data: " + element.getData());

@@ -1,4 +1,4 @@
-package wiki.parser.core;
+package wiki.parser.xml;
 
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Assertions;
@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 
-import static wiki.parser.core.Tags.MEDIAWIKI;
+import static wiki.parser.xml.Tags.MEDIAWIKI;
 
 @Log
 public class XmlParserTest {

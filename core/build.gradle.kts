@@ -10,4 +10,5 @@ dependencies {
     annotationProcessor(project(":annotation"))
 
     implementation(project(":annotation"))
+    implementation("org.wikiclean:wikiclean:1.2")
 }

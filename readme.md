@@ -6,6 +6,9 @@
 ## Wiki file format
 https://en.wikipedia.org/wiki/Help:Wikitext
 
+### Wiki Markup Cleaner
+* https://github.com/lintool/wikiclean
+
 ## Data source
 * https://meta.wikimedia.org/wiki/Data_dump_torrents#English_Wikipedia  
 Download Simple Wikipedia for smaller data source  
