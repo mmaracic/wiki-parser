@@ -10,7 +10,17 @@ plugins {
     `kotlin-dsl`
 }
 
+val props = Properties().apply {
+    load(FileInputStream(file("../gradle.properties")))
+}
+
 repositories {
     // Use the plugin portal to apply community plugins in convention plugins.
     gradlePluginPortal()
+}
+
+dependencies {
+    implementation("io.spring.gradle:dependency-management-plugin:1.1.6")
+    //Defines the spring version
+    implementation("org.springframework.boot:spring-boot-gradle-plugin:${props.getProperty("springVersion")}")
 }

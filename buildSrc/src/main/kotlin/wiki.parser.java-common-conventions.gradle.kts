@@ -8,6 +8,9 @@ import java.util.*
 plugins {
     // Apply the java Plugin to add support for Java.
     java
+
+    //produces test fixtures which are expected in folder src/testFixtures/java of the module
+    id("jacoco")
 }
 
 val props = Properties().apply {
@@ -37,7 +40,16 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-tasks.named<Test>("test") {
+tasks.test {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // tests are required to run before generating the report
+            reports {
+                xml.required = false
+                csv.required = false
+            }
 }
