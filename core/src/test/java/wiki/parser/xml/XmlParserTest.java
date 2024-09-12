@@ -35,13 +35,13 @@ public class XmlParserTest {
         var title1 = "April";
         WikiPage page = parser.readNext(WikiPage.class, new HashSet<>(List.of(MEDIAWIKI)));
         Assertions.assertEquals(title1, page.getTitle());
-        Assertions.assertNotNull(page.getRevison());
+        Assertions.assertNotNull(page.getRevision());
         Assertions.assertNotNull(page.getText());
         Assertions.assertTrue(page.getText().contains(title1));
         var title2 = "August";
         WikiPage page2 = parser.readNext(WikiPage.class, new HashSet<>(List.of(MEDIAWIKI)));
         Assertions.assertEquals(title2, page2.getTitle());
-        Assertions.assertNotNull(page2.getRevison());
+        Assertions.assertNotNull(page2.getRevision());
         Assertions.assertNotNull(page2.getText());
         Assertions.assertTrue(page2.getText().contains(title2));
     }
@@ -52,7 +52,7 @@ public class XmlParserTest {
         var title1 = "April";
         WikiPage page = parser.readNext(WikiPage.class, new HashSet<>(List.of(MEDIAWIKI)));
         Assertions.assertEquals(title1, page.getTitle());
-        Assertions.assertNotNull(page.getRevison());
+        Assertions.assertNotNull(page.getRevision());
         Assertions.assertNotNull(page.getText());
         Assertions.assertTrue(page.getText().contains(title1));
     }
@@ -62,7 +62,7 @@ public class XmlParserTest {
         var parser = new XmlParser("./src/test/resources/test3.xml");
         WikiPage page = parser.readNext(WikiPage.class, new HashSet<>(List.of(MEDIAWIKI)));
         Assertions.assertNotNull(page.getTitle());
-        Assertions.assertNotNull(page.getRevison());
+        Assertions.assertNotNull(page.getRevision());
         Assertions.assertNotNull(page.getText());
     }
 }

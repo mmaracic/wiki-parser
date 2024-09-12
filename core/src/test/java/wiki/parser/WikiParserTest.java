@@ -16,7 +16,7 @@ public class WikiParserTest {
         WikiPage page = parser.readNext();
         var title1 = "April";
         Assertions.assertEquals(title1, page.getTitle());
-        Assertions.assertNotNull(page.getRevison());
+        Assertions.assertNotNull(page.getRevision());
         Assertions.assertNotNull(page.getText());
         Assertions.assertTrue(page.getText().contains(title1));
     }
