@@ -5,17 +5,17 @@ version: '3.1'
 
 services:
 
-  db:
+  wiki-parser-db:
     build:
       context: ./postgres
-    image: postgres-custom:1.1
+    image: postgres-wiki-parser:1.0
     restart: always
     environment:
       POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     
-  adminer:
+  wiki-parser-adminer:
     image: adminer
     restart: always
     ports:

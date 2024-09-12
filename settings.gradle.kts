@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = "wiki-parser"
-include("app", "core", "annotation")
+include("app", "core", "annotation","database")

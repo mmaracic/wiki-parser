@@ -1,8 +1,8 @@
-package wiki.parser;
+package wiki.parser.core;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import wiki.parser.model.WikiPage;
+import wiki.parser.core.model.WikiPage;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.FileNotFoundException;

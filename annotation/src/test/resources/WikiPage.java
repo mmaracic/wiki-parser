@@ -1,4 +1,4 @@
-package wiki.parser.model;
+package wiki.parser.core.model;
 
 import wiki.parser.annotation.WikiPath;
 

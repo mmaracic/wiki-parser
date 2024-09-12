@@ -1,11 +1,12 @@
-package wiki.parser.model;
+package wiki.parser.core.model;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import wiki.parser.annotation.WikiPath;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 @WikiPath(path = "page")
 public class WikiPage {
     @WikiPath(path = "page.title")

@@ -1,4 +1,4 @@
-package wiki.parser.filter;
+package wiki.parser.core.filter;
 
 import org.wikiclean.WikiClean;
 import org.wikiclean.languages.English;

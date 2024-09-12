@@ -1,4 +1,4 @@
-package wiki.parser;
+package wiki.parser.core;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;

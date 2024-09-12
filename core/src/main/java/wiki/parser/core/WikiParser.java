@@ -1,9 +1,9 @@
-package wiki.parser;
+package wiki.parser.core;
 
-import wiki.parser.filter.MarkupFilter;
-import wiki.parser.filter.WikiMarkupFilter;
-import wiki.parser.model.WikiPage;
-import wiki.parser.xml.XmlParser;
+import wiki.parser.core.filter.MarkupFilter;
+import wiki.parser.core.filter.WikiMarkupFilter;
+import wiki.parser.core.model.WikiPage;
+import wiki.parser.core.xml.XmlParser;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.FileNotFoundException;
@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.List;
 
-import static wiki.parser.xml.Tags.MEDIAWIKI;
+import static wiki.parser.core.xml.Tags.MEDIAWIKI;
 
 public class WikiParser implements Parser<WikiPage> {
 

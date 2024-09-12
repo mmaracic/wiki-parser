@@ -1,4 +1,4 @@
-package wiki.parser.xml;
+package wiki.parser.core.xml;
 
 import lombok.extern.java.Log;
 import wiki.parser.annotation.WikiPath;

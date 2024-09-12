@@ -1,4 +1,4 @@
-package wiki.parser.xml;
+package wiki.parser.core.xml;
 
 import javax.xml.namespace.QName;
 import java.lang.reflect.Field;

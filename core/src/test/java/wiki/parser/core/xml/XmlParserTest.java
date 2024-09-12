@@ -1,9 +1,9 @@
-package wiki.parser.xml;
+package wiki.parser.core.xml;
 
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import wiki.parser.model.WikiPage;
+import wiki.parser.core.model.WikiPage;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.FileNotFoundException;
@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 
-import static wiki.parser.xml.Tags.MEDIAWIKI;
+import static wiki.parser.core.xml.Tags.MEDIAWIKI;
 
 @Log
 public class XmlParserTest {

@@ -1,4 +1,4 @@
-package wiki.parser.filter;
+package wiki.parser.core.filter;
 
 public interface MarkupFilter {
 
