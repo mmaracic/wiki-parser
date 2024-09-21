@@ -7,5 +7,5 @@ import java.lang.reflect.InvocationTargetException;
 public interface Parser<T> {
     void close() throws XMLStreamException, IOException;
 
-    T readNext() throws XMLStreamException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException;
+    T readNext() throws XMLStreamException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, IOException;
 }

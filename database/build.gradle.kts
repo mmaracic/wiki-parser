@@ -19,7 +19,9 @@ dependencies {
     //liquibase
     implementation("org.liquibase:liquibase-core")
 
+    //postgres testcontainer
     testImplementation("org.testcontainers:postgresql:1.20.1")
+    //postgres driver
     testRuntimeOnly("org.postgresql:postgresql")
 
 }

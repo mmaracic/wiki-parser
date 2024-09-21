@@ -1,6 +1,8 @@
 package wiki.parser.core.xml;
 
 import lombok.extern.java.Log;
+import org.apache.commons.compress.compressors.CompressorException;
+import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import wiki.parser.annotation.WikiPath;
 
 import javax.xml.namespace.QName;
@@ -8,8 +10,8 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.*;
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -26,8 +28,14 @@ public class XmlParser {
     private final XMLEventReader reader;
     private final InputStream inputStream;
 
-    public XmlParser(String filename) throws FileNotFoundException, XMLStreamException {
-        inputStream = new FileInputStream(filename);
+    public XmlParser(String filename, Boolean decompress) throws IOException, XMLStreamException, CompressorException {
+        if (decompress) {
+            inputStream = new CompressorStreamFactory().createCompressorInputStream(
+                    new BufferedInputStream(new FileInputStream(filename))
+            );
+        } else {
+            inputStream = new FileInputStream(filename);
+        }
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
         reader = xmlInputFactory.createXMLEventReader(inputStream);
     }

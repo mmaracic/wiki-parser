@@ -1,12 +1,12 @@
 package wiki.parser.core;
 
+import org.apache.commons.compress.compressors.CompressorException;
 import wiki.parser.core.filter.MarkupFilter;
 import wiki.parser.core.filter.WikiMarkupFilter;
 import wiki.parser.core.model.WikiPage;
 import wiki.parser.core.xml.XmlParser;
 
 import javax.xml.stream.XMLStreamException;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
@@ -19,8 +19,8 @@ public class WikiParser implements Parser<WikiPage> {
     private final MarkupFilter markupFilter = new WikiMarkupFilter();
     private final XmlParser xmlParser;
 
-    public WikiParser(String filename) throws XMLStreamException, FileNotFoundException {
-        xmlParser = new XmlParser(filename);
+    public WikiParser(String filename, Boolean decompress) throws XMLStreamException, IOException, CompressorException {
+        xmlParser = new XmlParser(filename, decompress);
     }
 
     @Override

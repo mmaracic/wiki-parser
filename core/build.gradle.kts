@@ -10,5 +10,10 @@ dependencies {
     annotationProcessor(project(":annotation"))
 
     implementation(project(":annotation"))
+
+    //Used to remove markup tags from wikipedia page text
     implementation("org.wikiclean:wikiclean:1.2")
+
+    //used to decompress bz2 format (can decompress gzip, bz2, 7z, zip etc)
+    implementation("org.apache.commons:commons-compress:1.27.1")
 }
