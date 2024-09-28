@@ -13,3 +13,12 @@ create table if not exists wiki.wiki_page(
     page_text text not null,
     source_id bigint not null references wiki.wiki_source(id)
 );
+
+create sequence if not exists wiki.wiki_index_seq NO MAXVALUE START WITH 1 INCREMENT BY 1 NO CYCLE;
+create table if not exists wiki.wiki_index(
+    id bigint not null primary key default nextval('wiki.wiki_index_seq'),
+    byte_offset bigint not null,
+    page_id bigint not null,
+    title jsonb not null,
+    source_id bigint not null references wiki.wiki_source(id)
+);

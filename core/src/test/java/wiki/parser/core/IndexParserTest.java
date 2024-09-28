@@ -22,17 +22,17 @@ public class IndexParserTest {
         log.info("Index count: " + index.size());
         var titleExclusionList = List.of("Wikipedia", "Wikimedia", "File", "Template");
         //Title has 10 entries
-        var maxTitle = index.stream().map(WikiIndex::getTitle).max(Comparator.comparingInt(List::size));
+        var maxTitle = index.stream().map(WikiIndex::getTitle).max(Comparator.comparingInt((it) -> it.content().size()));
         log.info("Maximum title: " + maxTitle);
-        log.info("Maximum title components: " + maxTitle.get().size());
+        log.info("Maximum title components: " + maxTitle.get().content().size());
         var maxTitleSkipWikipediaSource = index.stream()
-                .map(WikiIndex::getTitle).filter((it) -> !titleExclusionList.contains(it.getFirst()))
-                .max(Comparator.comparingInt(List::size));
+                .map(WikiIndex::getTitle).filter((it) -> !titleExclusionList.contains(it.content().getFirst()))
+                .max(Comparator.comparingInt((it) -> it.content().size()));
         //Title now has 4 entries
-        log.info("Maximum title components skipping Wikipedia entries: " + maxTitleSkipWikipediaSource.get().size());
+        log.info("Maximum title components skipping Wikipedia entries: " + maxTitleSkipWikipediaSource.get().content().size());
         //Count articles
         var articlesCount = index.stream()
-                .map(WikiIndex::getTitle).filter((it) -> !titleExclusionList.contains(it.getFirst())).count();
+                .map(WikiIndex::getTitle).filter((it) -> !titleExclusionList.contains(it.content().getFirst())).count();
         log.info("Articles count: " + articlesCount);
     }
 }

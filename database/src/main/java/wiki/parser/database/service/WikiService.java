@@ -3,11 +3,15 @@ package wiki.parser.database.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import wiki.parser.core.model.WikiIndex;
 import wiki.parser.core.model.WikiPage;
+import wiki.parser.database.model.WikiIndexEntity;
 import wiki.parser.database.model.WikiPageEntity;
 import wiki.parser.database.model.WikiSourceEntity;
+import wiki.parser.database.repository.WikiPageRepository;
 import wiki.parser.database.repository.WikiSourceRepository;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,12 +21,19 @@ import java.util.stream.Collectors;
 public class WikiService {
 
     private final WikiSourceRepository wikiSourceRepository;
+    private final WikiPageRepository wikiPageRepository;
 
-    public void storePages(String source, Set<WikiPage> pages) {
+    public List<WikiPageEntity> storePages(WikiSourceEntity wikiSourceEntity, Set<WikiPage> pages) {
 
-        WikiSourceEntity wikiSourceEntity = WikiSourceEntity.builder().source(source).build();
-        wikiSourceRepository.save(wikiSourceEntity);
         var pageEntities = pages.stream().map((it) -> WikiPageEntity.builder().page(it).source(wikiSourceEntity).build()).collect(Collectors.toSet());
-        wikiSourceEntity.setPages(pageEntities);
+        return wikiPageRepository.saveAll(pageEntities);
+    }
+
+    public WikiSourceEntity storeSource(String source, Set<WikiIndex> index) {
+
+        WikiSourceEntity wikiSourceEntity = wikiSourceRepository.save(WikiSourceEntity.builder().source(source).build());
+        var indexEntities = index.stream().map((it) -> WikiIndexEntity.builder().index(it).source(wikiSourceEntity).build()).collect(Collectors.toSet());
+        wikiSourceEntity.setIndexes(indexEntities);
+        return wikiSourceEntity;
     }
 }

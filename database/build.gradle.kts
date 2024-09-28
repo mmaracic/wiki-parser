@@ -13,6 +13,9 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
+    //ObjectMapper
+    implementation("org.springframework.boot:spring-boot-starter-json")
+
     //validation
     implementation("org.springframework.boot:spring-boot-starter-validation")
 

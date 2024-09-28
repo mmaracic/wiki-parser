@@ -3,6 +3,7 @@ package wiki.parser.core;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import wiki.parser.core.model.WikiIndex;
+import wiki.parser.core.util.StringList;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -38,7 +39,7 @@ public class IndexParser {
                 entry = WikiIndex.builder()
                         .offset(Long.parseLong(parts.get(0)))
                         .pageId(Long.parseLong(parts.get(1)))
-                        .title(parts.subList(2, parts.size())).build();
+                        .title(new StringList(parts.subList(2, parts.size()))).build();
             } else {
                 throw new IllegalStateException("Each index entry has to have 3 or more components, this one has " + parts.size());
             }

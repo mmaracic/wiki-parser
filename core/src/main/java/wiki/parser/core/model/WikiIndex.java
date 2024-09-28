@@ -1,17 +1,12 @@
 package wiki.parser.core.model;
 
 import lombok.*;
-
-import java.util.List;
+import wiki.parser.core.util.StringList;
 
 /**
- * Sample with 3 components:
+ * Title can have multiple components on its own
  * offset1:pageId1:title1
  * offset2:pageId2:title2
- * <p>
- * Sample with 4 components:
- * offset1:pageId1:source:title1
- *
  */
 @Data
 @Builder
@@ -27,5 +22,5 @@ public class WikiIndex {
 
     private Long pageId;
 
-    private List<String> title;
+    private StringList title;
 }

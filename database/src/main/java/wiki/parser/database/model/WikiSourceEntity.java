@@ -32,5 +32,5 @@ public class WikiSourceEntity {
 
     @Builder.Default
     @OneToMany(cascade=ALL, mappedBy="source")
-    private Set<WikiPageEntity> pages = new HashSet<>();
+    private Set<WikiIndexEntity> indexes = new HashSet<>();
 }
