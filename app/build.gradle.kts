@@ -3,11 +3,14 @@
  */
 
 plugins {
-    id("wiki.parser.java-application-conventions")
+    id("wiki.parser.spring-application-conventions")
 }
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":database"))
+
+    testImplementation(testFixtures(project(":database")))
 }
 
 application {

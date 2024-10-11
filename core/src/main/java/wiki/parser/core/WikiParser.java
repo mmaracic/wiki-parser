@@ -5,6 +5,7 @@ import wiki.parser.core.filter.MarkupFilter;
 import wiki.parser.core.filter.WikiMarkupFilter;
 import wiki.parser.core.model.WikiPage;
 import wiki.parser.core.xml.XmlParser;
+import wiki.parser.core.xml.XmlParserException;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class WikiParser implements Parser<WikiPage> {
     }
 
     @Override
-    public WikiPage readNext() throws XMLStreamException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public WikiPage readNext() throws XMLStreamException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, XmlParserException {
         WikiPage page = xmlParser.readNext(WikiPage.class, new HashSet<>(List.of(MEDIAWIKI)));
         String filterInput = page.getText();
         String filteredOutput = markupFilter.filterText(filterInput);

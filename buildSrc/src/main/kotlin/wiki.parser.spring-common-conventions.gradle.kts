@@ -3,7 +3,7 @@ plugins {
     java
     // NOTE: external plugin version is specified in implementation dependency artifact of the project's build file
     id("io.spring.dependency-management")
-    //applies spring BOM to define compatible version for spring related library
+    //produces test fixtures which are expected in folder src/testFixtures/java of the module
     id("java-test-fixtures")
 }
 

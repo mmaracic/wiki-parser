@@ -45,7 +45,7 @@ public class XmlParser {
         inputStream.close();
     }
 
-    public <T> T readNext(Class<T> c, Set<String> ignoredTags) throws XMLStreamException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public <T> T readNext(Class<T> c, Set<String> ignoredTags) throws XMLStreamException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, XmlParserException {
         String classPath = analyzeClass(c);
         //key is path, value is attribute object field
         Map<String, Field> fields = analyzeClassFields(c);
@@ -55,8 +55,12 @@ public class XmlParser {
         if (!fieldStack.isEmpty()) {
             throw new IllegalAccessException("Unexpected data end, stack: " + fieldStack);
         }
+        try {
+            readNext(object, ignoredTags, fieldStack);
 
-        readNext(object, ignoredTags, fieldStack);
+        } catch (XMLStreamException e) {
+            throw new XmlParserException(fieldStack, e);
+        }
         return object;
     }
 
@@ -106,7 +110,7 @@ public class XmlParser {
                 throw new IllegalArgumentException("Unsupported element " + event);
             }
         }
-        log.info("Parsing of object done");
+        //log.info("Parsing of object done");
     }
 
     private Map<QName, String> extractAttributes(StartElement element) {

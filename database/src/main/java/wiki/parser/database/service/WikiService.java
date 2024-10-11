@@ -29,7 +29,7 @@ public class WikiService {
         return wikiPageRepository.saveAll(pageEntities);
     }
 
-    public WikiSourceEntity storeSource(String source, Set<WikiIndex> index) {
+    public WikiSourceEntity storeSource(String source, List<WikiIndex> index) {
 
         WikiSourceEntity wikiSourceEntity = wikiSourceRepository.save(WikiSourceEntity.builder().source(source).build());
         var indexEntities = index.stream().map((it) -> WikiIndexEntity.builder().index(it).source(wikiSourceEntity).build()).collect(Collectors.toSet());

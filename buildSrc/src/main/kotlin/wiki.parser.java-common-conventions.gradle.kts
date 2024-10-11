@@ -9,7 +9,7 @@ plugins {
     // Apply the java Plugin to add support for Java.
     java
 
-    //produces test fixtures which are expected in folder src/testFixtures/java of the module
+    //produces coverage information
     id("jacoco")
 }
 

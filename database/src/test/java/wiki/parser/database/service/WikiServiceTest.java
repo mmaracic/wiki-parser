@@ -1,8 +1,6 @@
 package wiki.parser.database.service;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -10,19 +8,22 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
 import wiki.parser.core.model.WikiIndex;
 import wiki.parser.core.util.StringList;
+import wiki.parser.database.AbstractDatabaseTest;
 import wiki.parser.database.DatabaseConfiguration;
 import wiki.parser.core.model.WikiPage;
 import wiki.parser.database.model.WikiSourceEntity;
 import wiki.parser.database.repository.WikiPageRepository;
 import wiki.parser.database.repository.WikiSourceRepository;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @DataJpaTest
 @ContextConfiguration(classes = DatabaseConfiguration.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class WikiServiceTest {
+public class WikiServiceTest extends AbstractDatabaseTest {
 
     @Autowired
     private WikiSourceRepository wikiSourceRepository;
@@ -33,16 +34,6 @@ public class WikiServiceTest {
     @Autowired
     private WikiService wikiService;
 
-
-    @BeforeAll
-    static void beforeAll() {
-        DatabaseConfiguration.postgresTestContainer.start();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        DatabaseConfiguration.postgresTestContainer.stop();
-    }
 
     @Test
     public void contextTest() {
@@ -55,7 +46,7 @@ public class WikiServiceTest {
         pages.add(WikiPage.builder().title("title1").revision("1").text("Testing text 1").build());
         pages.add(WikiPage.builder().title("title2").revision("2").text("Testing text 2").build());
 
-        WikiSourceEntity source = wikiService.storeSource("Test source", Set.of());
+        WikiSourceEntity source = wikiService.storeSource("Test source", List.of());
         wikiService.storePages(source, pages);
 
         var dbSources = wikiSourceRepository.findAll();
@@ -75,7 +66,7 @@ public class WikiServiceTest {
 
     @Test
     public void storeIndexTest() {
-        Set<WikiIndex> indexes = new HashSet<>();
+        List<WikiIndex> indexes = new ArrayList<>();
         indexes.add(WikiIndex.builder().offset(10L).pageId(11L).title(new StringList("title1", "subtitle1")).build());
         indexes.add(WikiIndex.builder().offset(20L).pageId(21L).title(new StringList("title2", "subtitle2")).build());
 

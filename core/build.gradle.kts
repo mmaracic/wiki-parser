@@ -15,5 +15,6 @@ dependencies {
     implementation("org.wikiclean:wikiclean:1.2")
 
     //used to decompress bz2 format (can decompress gzip, bz2, 7z, zip etc)
-    implementation("org.apache.commons:commons-compress:1.27.1")
+    //api means this dependency is exposed to modules using this one
+    api("org.apache.commons:commons-compress:1.27.1")
 }
