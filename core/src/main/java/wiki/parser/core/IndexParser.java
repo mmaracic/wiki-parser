@@ -6,7 +6,6 @@ import wiki.parser.core.model.WikiIndex;
 import wiki.parser.core.util.StringList;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +28,7 @@ public class IndexParser {
         reader.close();
     }
 
-    public List<WikiIndex> readAll() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, IOException {
+    public List<WikiIndex> readAll() throws IOException {
         List<WikiIndex> index = new ArrayList<>(1000);
         String line = reader.readLine();
         while (line != null && !line.isBlank()) {

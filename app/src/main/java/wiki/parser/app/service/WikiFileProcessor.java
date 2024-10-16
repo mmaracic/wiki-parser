@@ -8,12 +8,13 @@ import wiki.parser.core.IndexParser;
 import wiki.parser.core.WikiParser;
 import wiki.parser.core.model.WikiIndex;
 import wiki.parser.core.model.WikiPage;
+import wiki.parser.core.reader.WikiMultipartReader;
+import wiki.parser.core.reader.XmlReader;
 import wiki.parser.database.model.WikiSourceEntity;
 import wiki.parser.database.service.WikiService;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Set;
 
@@ -24,15 +25,16 @@ public class WikiFileProcessor {
 
     private final WikiService wikiService;
 
-    public void process(String wikiFileName, String indexFileName, boolean decompress) throws XMLStreamException, CompressorException, IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        log.info("Parser setup");
-        WikiParser wikiParser = new WikiParser(wikiFileName, decompress);
+    public void process(String wikiFileName, String indexFileName, boolean decompress) throws XMLStreamException, CompressorException, IOException {
         IndexParser indexParser = new IndexParser(indexFileName);
         log.info("Reading index");
         List<WikiIndex> indices = indexParser.readAll();
         log.info("Index entry count: " + indices.size());
         log.info("Storing source");
-        WikiSourceEntity source = wikiService.storeSource(wikiFileName, indices);
+        WikiSourceEntity source = wikiService.storeSource(wikiFileName, List.of());
+        log.info("Parser setup");
+        XmlReader reader = new WikiMultipartReader(wikiFileName, indices, decompress);
+        WikiParser wikiParser = new WikiParser(reader);
         log.info("Starting to read pages");
         int i = 0;
         try {

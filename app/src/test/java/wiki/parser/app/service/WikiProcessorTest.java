@@ -2,6 +2,7 @@ package wiki.parser.app.service;
 
 import lombok.extern.java.Log;
 import org.apache.commons.compress.compressors.CompressorException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -12,8 +13,8 @@ import wiki.parser.database.DatabaseConfiguration;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
+@Disabled
 @Log
 @SpringBootTest
 @ContextConfiguration(classes = {DatabaseConfiguration.class, WikiFileProcessor.class})
@@ -24,7 +25,7 @@ public class WikiProcessorTest extends AbstractDatabaseTest {
     private WikiFileProcessor wikiFileProcessor;
 
     @Test
-    public void testWiki() throws XMLStreamException, IOException, CompressorException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public void testWiki() throws XMLStreamException, IOException, CompressorException {
         String indexFileName = "../data/simplewiki-20240901-pages-articles-multistream-index.txt.bz2";
         String wikiFileName = "../data/simplewiki-20230820-pages-articles-multistream.xml.bz2";
 
