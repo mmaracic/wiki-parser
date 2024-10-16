@@ -4,6 +4,7 @@ import org.apache.commons.compress.compressors.CompressorException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import wiki.parser.core.model.WikiPage;
+import wiki.parser.core.reader.XmlMultipartReader;
 import wiki.parser.core.xml.XmlParserException;
 
 import javax.xml.stream.XMLStreamException;
@@ -14,7 +15,7 @@ public class WikiParserTest {
 
     @Test
     public void testReadOnePage() throws XMLStreamException, IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, CompressorException, XmlParserException {
-        var parser = new WikiParser("./src/test/resources/test4.xml", false);
+        var parser = new WikiParser(new XmlMultipartReader("./src/test/resources/test4.xml", false));
         WikiPage page = parser.readNext();
         var title1 = "April";
         Assertions.assertEquals(title1, page.getTitle());

@@ -2,18 +2,15 @@ package wiki.parser.core.xml;
 
 import lombok.extern.java.Log;
 import org.apache.commons.compress.compressors.CompressorException;
-import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import wiki.parser.annotation.WikiPath;
+import wiki.parser.core.reader.XmlReader;
+import wiki.parser.core.stream.ByteRange;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.*;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -25,27 +22,21 @@ import java.util.*;
 @Log
 public class XmlParser {
 
-    private final XMLEventReader reader;
-    private final InputStream inputStream;
+    private final XMLEventReader xmlEventReader;
 
-    public XmlParser(String filename, Boolean decompress) throws IOException, XMLStreamException, CompressorException {
-        if (decompress) {
-            inputStream = new CompressorStreamFactory().createCompressorInputStream(
-                    new BufferedInputStream(new FileInputStream(filename))
-            );
-        } else {
-            inputStream = new FileInputStream(filename);
-        }
-        XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
-        reader = xmlInputFactory.createXMLEventReader(inputStream);
+    public XmlParser(XmlReader reader) throws XMLStreamException, CompressorException, IOException {
+        this.xmlEventReader = reader.getReader(Set.of(new ByteRange(0)));
     }
 
-    public void close() throws XMLStreamException, IOException {
-        reader.close();
-        inputStream.close();
+    public XmlParser(XmlReader reader, Set<ByteRange> ranges) throws XMLStreamException, CompressorException, IOException {
+        this.xmlEventReader = reader.getReader(ranges);
     }
 
-    public <T> T readNext(Class<T> c, Set<String> ignoredTags) throws XMLStreamException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, XmlParserException {
+    public void close() throws XMLStreamException {
+        xmlEventReader.close();
+    }
+
+    public <T> T readNext(Class<T> c, Set<String> ignoredTags) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, XmlParserException {
         String classPath = analyzeClass(c);
         //key is path, value is attribute object field
         Map<String, Field> fields = analyzeClassFields(c);
@@ -56,15 +47,15 @@ public class XmlParser {
             throw new IllegalAccessException("Unexpected data end, stack: " + fieldStack);
         }
         try {
-            readNext(object, ignoredTags, fieldStack);
+            readNext(xmlEventReader, object, ignoredTags, fieldStack);
 
-        } catch (XMLStreamException e) {
+        } catch (Exception e) {
             throw new XmlParserException(fieldStack, e);
         }
         return object;
     }
 
-    private <T> void readNext(T object, Set<String> ignoredTags, XStreamFieldStack fieldStack) throws XMLStreamException, IllegalAccessException {
+    private <T> void readNext(XMLEventReader reader, T object, Set<String> ignoredTags, XStreamFieldStack fieldStack) throws XMLStreamException, IllegalAccessException {
 
         while (reader.hasNext() && fieldStack.getInstancesVisited() < 1) {
             // Event is actually the tag . It is of 3 types

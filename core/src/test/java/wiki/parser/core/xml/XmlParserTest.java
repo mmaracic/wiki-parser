@@ -5,6 +5,7 @@ import org.apache.commons.compress.compressors.CompressorException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import wiki.parser.core.model.WikiPage;
+import wiki.parser.core.reader.XmlMultipartReader;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
@@ -26,13 +27,13 @@ public class XmlParserTest {
     @Test
     public void testFileExists() {
         Assertions.assertDoesNotThrow(() -> {
-            new XmlParser("./src/test/resources/test.xml", false);
+            new XmlParser(new XmlMultipartReader("./src/test/resources/test.xml", false));
         });
     }
 
     @Test
     public void testReadTwoPages() throws XMLStreamException, IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, CompressorException, XmlParserException {
-        var parser = new XmlParser("./src/test/resources/test.xml", false);
+        var parser = new XmlParser(new XmlMultipartReader("./src/test/resources/test.xml", false));
         var title1 = "April";
         WikiPage page = parser.readNext(WikiPage.class, new HashSet<>(List.of(MEDIAWIKI)));
         Assertions.assertEquals(title1, page.getTitle());
@@ -49,7 +50,7 @@ public class XmlParserTest {
 
     @Test
     public void testReadOnePageWithHeader() throws XMLStreamException, IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, CompressorException, XmlParserException {
-        var parser = new XmlParser("./src/test/resources/test2.xml", false);
+        var parser = new XmlParser(new XmlMultipartReader("./src/test/resources/test2.xml", false));
         var title1 = "April";
         WikiPage page = parser.readNext(WikiPage.class, new HashSet<>(List.of(MEDIAWIKI)));
         Assertions.assertEquals(title1, page.getTitle());
@@ -60,7 +61,7 @@ public class XmlParserTest {
 
     @Test
     public void testReadOnePage() throws XMLStreamException, IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, CompressorException, XmlParserException {
-        var parser = new XmlParser("./src/test/resources/test3.xml", false);
+        var parser = new XmlParser(new XmlMultipartReader("./src/test/resources/test3.xml", false));
         WikiPage page = parser.readNext(WikiPage.class, new HashSet<>(List.of(MEDIAWIKI)));
         Assertions.assertNotNull(page.getTitle());
         Assertions.assertNotNull(page.getRevision());
@@ -69,7 +70,7 @@ public class XmlParserTest {
 
     @Test
     public void testReadOnePageWithFullStructure() throws XMLStreamException, IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, CompressorException, XmlParserException {
-        var parser = new XmlParser("./src/test/resources/test4.xml", false);
+        var parser = new XmlParser(new XmlMultipartReader("./src/test/resources/test4.xml", false));
         var title1 = "April";
         WikiPage page = parser.readNext(WikiPage.class, new HashSet<>(List.of(MEDIAWIKI)));
         Assertions.assertEquals(title1, page.getTitle());

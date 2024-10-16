@@ -7,16 +7,15 @@ import org.junit.jupiter.api.Test;
 import wiki.parser.core.model.WikiIndex;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 import java.util.List;
 
 @Log
-public class IndexParserTest {
+public class WikiIndexParserTest {
 
     @Test
-    public void parseIndex() throws IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, CompressorException {
-        var parser = new IndexParser("./src/test/resources/simplewiki-20240901-pages-articles-multistream-index.txt.bz2");
+    public void parseIndex() throws IOException, CompressorException {
+        var parser = new WikiIndexParser("./src/test/resources/simplewiki-20240901-pages-articles-multistream-index.txt.bz2");
         List<WikiIndex> index = parser.readAll();
         Assertions.assertFalse(index.isEmpty());
         log.info("Index count: " + index.size());
