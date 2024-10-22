@@ -13,33 +13,37 @@ import java.util.Set;
 
 public class XmlMultipartReader implements XmlReader {
 
-    private final String filename;
-    private final Boolean decompress;
+    private final InputStream inputStream;
+    private final XMLInputFactory xmlInputFactory;
+    private XMLEventReader reader = null;
 
-    private InputStream inputStream;
-
-    public XmlMultipartReader(String filename, Boolean decompress) {
-        this.filename = filename;
-        this.decompress = decompress;
-    }
-
-    @Override
-    public XMLEventReader getReader() throws XMLStreamException, IOException, CompressorException {
-        return getReader(Set.of(new ByteRange(0)));
-    }
-
-    @Override
-    public XMLEventReader getReader(Set<ByteRange> ranges) throws XMLStreamException, IOException, CompressorException {
-        if (this.inputStream != null) {
-            inputStream.close();
-        }
+    public XmlMultipartReader(String filename, Boolean decompress, Set<ByteRange> ranges) throws FileNotFoundException, CompressorException {
         this.inputStream = (decompress) ?
                 new CompressorStreamFactory(true).createCompressorInputStream(
                         new BufferedInputStream(new PositionedBoundedStream(new FileInputStream(filename), ranges))
                 ) :
-                new BufferedInputStream(new PositionedBoundedStream(new FileInputStream(filename)));
-        XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
-        return xmlInputFactory.createXMLEventReader(inputStream);
+                new PositionedBoundedStream(new FileInputStream(filename));
+        this.xmlInputFactory = XMLInputFactory.newInstance();
+    }
+
+    public XmlMultipartReader(String filename, Boolean decompress) throws CompressorException, FileNotFoundException {
+        this(filename, decompress, Set.of(new ByteRange(0)));
+    }
+
+    @Override
+    public XMLEventReader getReader() throws XMLStreamException {
+        if (reader == null) {
+            reader = xmlInputFactory.createXMLEventReader(inputStream);
+        }
+        reader.close();
+        return reader;
+    }
+
+    @Override
+    public long skipBytes(long n) throws IOException, XMLStreamException {
+        reader.close();
+        long skipCount = inputStream.skip(n);
+        return skipCount;
     }
 
     @Override

@@ -1,12 +1,14 @@
 package wiki.parser.core.stream;
 
 import lombok.Getter;
+import lombok.extern.java.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
+@Log
 public class PositionedBoundedStream extends InputStream {
 
     private final InputStream in;
@@ -36,11 +38,11 @@ public class PositionedBoundedStream extends InputStream {
 
     @Override
     public int read() throws IOException {
+        //log.info("Position: " + position);
         long skipBytes = skipToValidPosition(position);
         if (skipBytes == -1) {
             return -1;
-        }
-        else if (skipBytes > 0) {
+        } else if (skipBytes > 0) {
             in.skipNBytes(skipBytes);
             rangePosition++;
             position += skipBytes;

@@ -17,8 +17,10 @@ import wiki.parser.database.service.WikiService;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 
 @Service
 @Log
@@ -64,16 +66,17 @@ public class WikiFileProcessor {
         List<WikiIndex> interestingPages = indices.stream().filter((it) -> it.getTitle().toString().contains(title)).toList();
         log.info("Found " + interestingPages.size() + " interesting pages with titles: " + interestingPages.stream().map(WikiIndex::getTitle));
         log.info("Parser setup");
-        XmlReader reader = new XmlMultipartReader(wikiFileName, decompress);
         WikiIndexTransformer wikiIndexTransformer = new WikiIndexTransformer(indices);
-        WikiParser wikiParser = new WikiParser(reader, wikiIndexTransformer.toRange(interestingPages));
+        XmlReader reader = new XmlMultipartReader(wikiFileName, decompress, wikiIndexTransformer.toRange(interestingPages));
+        WikiParser wikiParser = new WikiParser(reader);
         log.info("Starting to read pages");
         List<WikiPage> pages = new ArrayList<>();
         try {
             while (true) {
                 pages.add(wikiParser.readNext());
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            log.log(Level.SEVERE, Arrays.toString(e.getStackTrace()));
         } finally {
             wikiParser.close();
         }

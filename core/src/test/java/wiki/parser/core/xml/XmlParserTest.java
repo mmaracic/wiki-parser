@@ -78,4 +78,26 @@ public class XmlParserTest {
         Assertions.assertNotNull(page.getText());
         Assertions.assertTrue(page.getText().contains(title1));
     }
+
+    @Test
+    public void testReadOnePageAfterPartialPage() throws XMLStreamException, IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, CompressorException, XmlParserException {
+        var parser = new XmlParser(new XmlMultipartReader("./src/test/resources/testFormattingError.xml", false));
+        var title1 = "April";
+        WikiPage page = parser.readNext(WikiPage.class, new HashSet<>(List.of(MEDIAWIKI)));
+        Assertions.assertEquals(title1, page.getTitle());
+        Assertions.assertNotNull(page.getRevision());
+        Assertions.assertNotNull(page.getText());
+        Assertions.assertTrue(page.getText().contains(title1));
+    }
+
+    @Test
+    public void testReadOnePageAfterPartialPage2() throws XMLStreamException, IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, CompressorException, XmlParserException {
+        var parser = new XmlParser(new XmlMultipartReader("./src/test/resources/testFormattingError2.xml", false));
+        var title1 = "April";
+        WikiPage page = parser.readNext(WikiPage.class, new HashSet<>(List.of(MEDIAWIKI)));
+        Assertions.assertEquals(title1, page.getTitle());
+        Assertions.assertNotNull(page.getRevision());
+        Assertions.assertNotNull(page.getText());
+        Assertions.assertTrue(page.getText().contains(title1));
+    }
 }

@@ -1,10 +1,8 @@
 package wiki.parser.core.xml;
 
 import lombok.extern.java.Log;
-import org.apache.commons.compress.compressors.CompressorException;
 import wiki.parser.annotation.WikiPath;
 import wiki.parser.core.reader.XmlReader;
-import wiki.parser.core.stream.ByteRange;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -22,21 +20,17 @@ import java.util.*;
 @Log
 public class XmlParser {
 
-    private final XMLEventReader xmlEventReader;
+    private final XmlReader xmlReader;
 
-    public XmlParser(XmlReader reader) throws XMLStreamException, CompressorException, IOException {
-        this.xmlEventReader = reader.getReader(Set.of(new ByteRange(0)));
+    public XmlParser(XmlReader xmlReader) {
+        this.xmlReader = xmlReader;
     }
 
-    public XmlParser(XmlReader reader, Set<ByteRange> ranges) throws XMLStreamException, CompressorException, IOException {
-        this.xmlEventReader = reader.getReader(ranges);
+    public void close() throws XMLStreamException, IOException {
+        xmlReader.close();
     }
 
-    public void close() throws XMLStreamException {
-        xmlEventReader.close();
-    }
-
-    public <T> T readNext(Class<T> c, Set<String> ignoredTags) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, XmlParserException {
+    public <T> T readNext(Class<T> c, Set<String> ignoredTags) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, XmlParserException, XMLStreamException, IOException {
         String classPath = analyzeClass(c);
         //key is path, value is attribute object field
         Map<String, Field> fields = analyzeClassFields(c);
@@ -46,11 +40,15 @@ public class XmlParser {
         if (!fieldStack.isEmpty()) {
             throw new IllegalAccessException("Unexpected data end, stack: " + fieldStack);
         }
-        try {
-            readNext(xmlEventReader, object, ignoredTags, fieldStack);
-
-        } catch (Exception e) {
-            throw new XmlParserException(fieldStack, e);
+        while (true) {
+            try {
+                readNext(xmlReader.getReader(), object, ignoredTags, fieldStack);
+                break;
+            } catch (XMLStreamException ex) {
+                long errorPosition = ex.getLocation().getCharacterOffset();
+                long skip = xmlReader.skipBytes(errorPosition);
+                //log.info("Skipped bytes: " + skip);
+            }
         }
         return object;
     }
@@ -69,7 +67,7 @@ public class XmlParser {
             if (event.isStartElement()) {
                 StartElement element = (StartElement) event;
                 String elementName = element.getName().getLocalPart();
-
+                //log.info("Start element: " + elementName + " in path " + fieldStack.toString());
 
                 if (!ignoredTags.contains(elementName)) {
                     fieldStack.push(element.getName());
