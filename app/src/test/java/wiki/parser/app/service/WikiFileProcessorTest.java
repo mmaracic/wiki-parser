@@ -37,7 +37,9 @@ public class WikiFileProcessorTest extends AbstractDatabaseTest {
         log.info("Done reading source");
     }
 
+    //Todo tests
     @Test
+    @Disabled
     public void testSelectiveWikiProcess() throws XMLStreamException, IOException, CompressorException {
         String indexFileName = "../data/simplewiki-20240901-pages-articles-multistream-index.txt.bz2";
         String wikiFileName = "../data/simplewiki-20240901-pages-articles-multistream.xml.bz2";

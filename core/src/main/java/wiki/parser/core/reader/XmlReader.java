@@ -1,12 +1,12 @@
 package wiki.parser.core.reader;
 
-import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
+import java.io.InputStream;
 
 public interface XmlReader {
 
-    XMLEventReader getReader() throws XMLStreamException;
+    InputStream getStream();
 
     long skipBytes(long n) throws IOException, XMLStreamException;
 

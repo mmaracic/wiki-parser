@@ -6,6 +6,7 @@ import wiki.parser.core.filter.WikiMarkupFilter;
 import wiki.parser.core.model.WikiPage;
 import wiki.parser.core.reader.XmlReader;
 import wiki.parser.core.xml.XmlParser;
+import wiki.parser.core.xml.XmlStaxParser;
 import wiki.parser.core.xml.XmlParserException;
 
 import javax.xml.stream.XMLStreamException;
@@ -22,7 +23,7 @@ public class WikiParser implements Parser<WikiPage> {
     private final XmlParser xmlParser;
 
     public WikiParser(XmlReader reader) throws XMLStreamException, CompressorException, IOException {
-        xmlParser = new XmlParser(reader);
+        xmlParser = new XmlStaxParser(reader);
     }
 
     @Override
