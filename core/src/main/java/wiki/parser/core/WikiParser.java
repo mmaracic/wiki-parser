@@ -1,6 +1,7 @@
 package wiki.parser.core;
 
 import org.apache.commons.compress.compressors.CompressorException;
+import org.xml.sax.SAXException;
 import wiki.parser.core.filter.MarkupFilter;
 import wiki.parser.core.filter.WikiMarkupFilter;
 import wiki.parser.core.model.WikiPage;
@@ -22,7 +23,7 @@ public class WikiParser implements Parser<WikiPage> {
     private final MarkupFilter markupFilter = new WikiMarkupFilter();
     private final XmlParser xmlParser;
 
-    public WikiParser(XmlReader reader) throws XMLStreamException, CompressorException, IOException {
+    public WikiParser(XmlReader reader) throws XMLStreamException {
         xmlParser = new XmlStaxParser(reader);
     }
 
@@ -32,7 +33,7 @@ public class WikiParser implements Parser<WikiPage> {
     }
 
     @Override
-    public WikiPage readNext() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, XmlParserException, XMLStreamException, IOException {
+    public WikiPage readNext() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, XmlParserException, XMLStreamException, IOException, SAXException {
         WikiPage page = xmlParser.readNext(WikiPage.class, new HashSet<>(List.of(MEDIAWIKI)));
         String filterInput = page.getText();
         String filteredOutput = markupFilter.filterText(filterInput);

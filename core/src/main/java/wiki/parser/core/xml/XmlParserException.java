@@ -1,8 +1,8 @@
 package wiki.parser.core.xml;
 
-public class XmlParserException extends Exception {
+public class XmlParserException extends RuntimeException {
 
-    XmlParserException(XStreamStack path, Throwable cause) {
-        super(path.toString(), cause);
+    XmlParserException(XStreamFieldStack fieldStack, Throwable cause) {
+        super(fieldStack.toString(), cause);
     }
 }
