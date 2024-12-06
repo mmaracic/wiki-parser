@@ -43,12 +43,17 @@ public class XStreamFieldStack implements XStreamStack {
 
     @Override
     public boolean pop(QName element) {
-        if (xPath.equals(classPath)) {
+        var classPathCheck = xPath.equals(classPath);
+        var result = xPath.pop(element);
+        if (!result) {
+            return false;
+        }
+        if (classPathCheck) {
             classPathsVisited++;
         }
         fieldsQualifyAtPathLevel.removeLast();
         fieldsMatchAtPathLevel.removeLast();
-        return xPath.pop(element);
+        return true;
     }
 
     @Override
@@ -76,7 +81,11 @@ public class XStreamFieldStack implements XStreamStack {
     }
 
     public Set<Field> getMatchingFields() {
-        return fieldsMatchAtPathLevel.getLast().stream().map(Map.Entry::getValue).collect(Collectors.toSet());
+        if (!fieldsMatchAtPathLevel.isEmpty()) {
+            return fieldsMatchAtPathLevel.getLast().stream().map(Map.Entry::getValue).collect(Collectors.toSet());
+        } else {
+            return Set.of();
+        }
     }
 
     public int getMatchingFieldsCount() {

@@ -1,9 +1,12 @@
 package wiki.parser.core.xml;
 
+import lombok.extern.java.Log;
+
 import javax.xml.namespace.QName;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Log
 public class XStreamPath implements XStreamStack {
 
     private final List<QName> orderedPath = new ArrayList<>(10);
@@ -21,7 +24,8 @@ public class XStreamPath implements XStreamStack {
     @Override
     public boolean pop(QName input) {
         if (orderedPath.isEmpty()) {
-            throw new IllegalStateException("Trying to pop from an empty path");
+            log.severe("Trying to pop " + input + " from an empty path");
+            return false;
         } else {
             QName element = orderedPath.removeLast();
             if (!element.equals(input)) {

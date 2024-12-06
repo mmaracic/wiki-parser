@@ -35,7 +35,7 @@ public class XmlSaxParserTest {
     }
 
     @Test
-    @Disabled
+    @Disabled("Can not handle text in prolog")
     public void testReadTwoPages() throws XMLStreamException, IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, CompressorException, XmlParserException, SAXException, ParserConfigurationException {
         var parser = new XmlSaxParser(new XmlMultipartReader("./src/test/resources/test.xml", false));
         var title1 = "April";
@@ -83,9 +83,8 @@ public class XmlSaxParserTest {
         Assertions.assertTrue(page.getText().contains(title1));
     }
 
-    //Todo SAX tests
     @Test
-    @Disabled
+    @Disabled("Can not handle corrupted file")
     public void testReadOnePageAfterPartialPage() throws XMLStreamException, IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, CompressorException, XmlParserException, SAXException, ParserConfigurationException {
         var parser = new XmlSaxParser(new XmlMultipartReader("./src/test/resources/testFormattingError.xml", false));
         var title1 = "April";
@@ -97,7 +96,7 @@ public class XmlSaxParserTest {
     }
 
     @Test
-    @Disabled
+    @Disabled("Can not handle corrupted file")
     public void testReadOnePageAfterPartialPage2() throws XMLStreamException, IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, CompressorException, XmlParserException, SAXException, ParserConfigurationException {
         var parser = new XmlSaxParser(new XmlMultipartReader("./src/test/resources/testFormattingError2.xml", false));
         var title1 = "April";
