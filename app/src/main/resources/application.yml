@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/db?currentSchema=wiki
+    username: ${db_user}
+    password: ${db_pass}
+    #In spring boot runtime configuration under environment variables set: db_user=<user>;db_pass=<pass>
+    driverClassName: org.postgresql.Driver

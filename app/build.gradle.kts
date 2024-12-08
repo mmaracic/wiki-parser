@@ -10,6 +10,10 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":database"))
 
+    implementation("org.springframework.boot:spring-boot-starter-web")
+
+    runtimeOnly("org.postgresql:postgresql")
+
     testImplementation(testFixtures(project(":database")))
 }
 

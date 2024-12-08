@@ -11,7 +11,9 @@ dependencies {
 
     implementation(project(":core"))
 
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    //api means this dependency is exposed to modules using this one
+    //Specifically we need it in app module to enable jpa repositories
+    api("org.springframework.boot:spring-boot-starter-data-jpa")
 
     //ObjectMapper
     implementation("org.springframework.boot:spring-boot-starter-json")

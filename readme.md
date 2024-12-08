@@ -1,7 +1,13 @@
 # Wiki parser
-## How to use Stax parser
+## Parsers
+StAX and SAX parser can not handle text in prologue or xml files corrupted in some way.
+That is why VanillaParser was implemented from scratch, it does no validation and can handle validity problems but parsing is relatively simple right now. 
+### How to use Stax parser
 * https://www.geeksforgeeks.org/stax-xml-parser-java/
 * https://www.baeldung.com/java-stax
+
+### How to use SAX parser
+* https://www.baeldung.com/java-sax-parser
 
 ## Wiki file format
 https://en.wikipedia.org/wiki/Help:Wikitext
@@ -35,3 +41,9 @@ https://stackoverflow.com/questions/37702388/reading-a-large-compressed-file-usi
 Custom created stream to decompress continuously:  
 https://chaosinmotion.com/2011/07/29/and-another-curiosity-multi-stream-bzip2-files/
 
+## How to use application
+To search for text containing "april" on local machine use HTTP GET url:
+```
+http://localhost:8080/wiki/search?title-text=april
+```
+This will return full articles with "april" in title.
