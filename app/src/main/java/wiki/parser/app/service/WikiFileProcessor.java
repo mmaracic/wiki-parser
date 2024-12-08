@@ -95,7 +95,7 @@ public class WikiFileProcessor {
         }
         if (interestingPages.size() != pages.size()) {
             log.info("Read pages with titles: " + pages.stream().map(WikiPage::getTitle).toList());
-            throw new IllegalStateException("Should have retrieved " + interestingPages.size() + " interesting pages but instead retrieved " + pages.size());
+            log.severe("Should have retrieved " + interestingPages.size() + " interesting pages but instead retrieved " + pages.size());
         }
         log.info("Read " + pages.size() + " interesting pages");
         return pages;
