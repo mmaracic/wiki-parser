@@ -26,7 +26,8 @@ public class WikiFileProcessorTest extends AbstractDatabaseTest {
     @Autowired
     private WikiFileProcessor wikiFileProcessor;
 
-    @Disabled
+    //ToDo test this one
+    @Disabled("Full wiki processing not appropriate for automated tests")
     @Test
     public void testFullWikiProcessing() throws XMLStreamException, IOException, CompressorException {
         String indexFileName = "../data/simplewiki-20240901-pages-articles-multistream-index.txt.bz2";
@@ -37,14 +38,19 @@ public class WikiFileProcessorTest extends AbstractDatabaseTest {
         log.info("Done reading source");
     }
 
-    //Todo tests
     @Test
-    @Disabled
+    //@Disabled("Full wiki processing not appropriate for automated tests")
     public void testSelectiveWikiProcess() throws XMLStreamException, IOException, CompressorException {
         String indexFileName = "../data/simplewiki-20240901-pages-articles-multistream-index.txt.bz2";
         String wikiFileName = "../data/simplewiki-20240901-pages-articles-multistream.xml.bz2";
 
         List<WikiPage> interestingPages = wikiFileProcessor.process(wikiFileName, indexFileName, true, "april");
         Assertions.assertFalse(interestingPages.isEmpty());
+        var fetchedTitleList = interestingPages.stream().map(WikiPage::getTitle).toList();
+        var expectedTitleList = List.of("Emilio Caprile", "Caprile", "Henrique Capriles");
+        Assertions.assertTrue(
+                fetchedTitleList.size() == expectedTitleList.size()
+                        && fetchedTitleList.containsAll(expectedTitleList)
+                        && expectedTitleList.containsAll(fetchedTitleList));
     }
 }

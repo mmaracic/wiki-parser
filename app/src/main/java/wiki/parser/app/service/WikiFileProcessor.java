@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 @Service
 @Log
@@ -64,25 +65,39 @@ public class WikiFileProcessor {
         List<WikiIndex> indices = wikiIndexParser.readAll();
         log.info("Index entry count: " + indices.size());
         List<WikiIndex> interestingPages = indices.stream().filter((it) -> it.getTitle().toString().contains(title)).toList();
-        log.info("Found " + interestingPages.size() + " interesting pages with titles: " + interestingPages.stream().map(WikiIndex::getTitle));
+        Set<String> interestingTitles = interestingPages.stream().map(WikiIndex::getTitle)
+                .map((it) -> it.content().getFirst()).collect(Collectors.toSet());
+        log.info("Found " + interestingPages.size() + " interesting pages with titles: " + interestingTitles);
         log.info("Parser setup");
         WikiIndexTransformer wikiIndexTransformer = new WikiIndexTransformer(indices);
-        XmlReader reader = new XmlMultipartReader(wikiFileName, decompress, wikiIndexTransformer.toRange(interestingPages));
+        var ranges = wikiIndexTransformer.toRange(interestingPages);
+        log.info("Pages are in ranges: " + ranges);
+        XmlReader reader = new XmlMultipartReader(wikiFileName, decompress, ranges);
         WikiParser wikiParser = new WikiParser(reader);
         log.info("Starting to read pages");
         List<WikiPage> pages = new ArrayList<>();
+        int readPageCount = 0;
         try {
             while (true) {
-                pages.add(wikiParser.readNext());
+                var page = wikiParser.readNext();
+                readPageCount++;
+                //log.info("Title: " + page.getTitle());
+                if (!page.getTitle().isEmpty() && interestingTitles.contains(page.getTitle())) {
+                    pages.add(page);
+                }
             }
         } catch (Exception e) {
+            log.log(Level.SEVERE, e.getMessage());
             log.log(Level.SEVERE, Arrays.toString(e.getStackTrace()));
         } finally {
             wikiParser.close();
+            log.info("Read " + readPageCount + " total pages");
         }
         if (interestingPages.size() != pages.size()) {
+            log.info("Read pages with titles: " + pages.stream().map(WikiPage::getTitle).toList());
             throw new IllegalStateException("Should have retrieved " + interestingPages.size() + " interesting pages but instead retrieved " + pages.size());
         }
+        log.info("Read " + pages.size() + " interesting pages");
         return pages;
     }
 }

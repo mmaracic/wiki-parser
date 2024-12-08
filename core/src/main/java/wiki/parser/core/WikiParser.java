@@ -1,14 +1,13 @@
 package wiki.parser.core;
 
-import org.apache.commons.compress.compressors.CompressorException;
 import org.xml.sax.SAXException;
 import wiki.parser.core.filter.MarkupFilter;
 import wiki.parser.core.filter.WikiMarkupFilter;
 import wiki.parser.core.model.WikiPage;
 import wiki.parser.core.reader.XmlReader;
 import wiki.parser.core.xml.XmlParser;
-import wiki.parser.core.xml.XmlStaxParser;
 import wiki.parser.core.xml.XmlParserException;
+import wiki.parser.core.xml.XmlVanillaParser;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
@@ -23,8 +22,8 @@ public class WikiParser implements Parser<WikiPage> {
     private final MarkupFilter markupFilter = new WikiMarkupFilter();
     private final XmlParser xmlParser;
 
-    public WikiParser(XmlReader reader) throws XMLStreamException {
-        xmlParser = new XmlStaxParser(reader);
+    public WikiParser(XmlReader reader) {
+        xmlParser = new XmlVanillaParser(reader, 1000000);
     }
 
     @Override
