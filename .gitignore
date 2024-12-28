@@ -7,3 +7,6 @@ build
 
 # Ignore data folder because of large file
 data
+
+# Ignore FE distribution folder
+web

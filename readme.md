@@ -42,6 +42,11 @@ Custom created stream to decompress continuously:
 https://chaosinmotion.com/2011/07/29/and-another-curiosity-multi-stream-bzip2-files/
 
 ## How to use application
+How to run app from CLI:
+```
+./gradlew :app:bootRun -Ddb_user=<user> -Ddb_pass=<pass>
+```
+
 To search for text containing "april" on local machine use HTTP GET url:
 ```
 http://localhost:8080/wiki/search?title-text=april

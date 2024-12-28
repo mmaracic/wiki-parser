@@ -6,3 +6,8 @@ spring:
     password: ${db_pass}
     #In spring boot runtime configuration under environment variables set: db_user=<user>;db_pass=<pass>
     driverClassName: org.postgresql.Driver
+  mvc:
+    static-path-pattern: /web/**
+  web:
+    resources:
+      static-locations: classpath:/web/
