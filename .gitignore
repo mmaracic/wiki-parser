@@ -7,3 +7,5 @@ build
 
 # Ignore data folder because of large file
 data
+
+glowroot/
